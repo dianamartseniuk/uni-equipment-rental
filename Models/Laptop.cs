@@ -1,4 +1,4 @@
-using UniEquipmentRental.Models;
+namespace UniEquipmentRental.Models;
 
 public class Laptop : Equipment
 {
