@@ -9,11 +9,13 @@ public abstract class Equipment
     public string Model { get; private set; }
     public EquipmentStatus Status { get; protected set; }
 
-    public Equipment (string name)
+    public Equipment (string name, string brand, string model)
     {
         LastId++;
         Id = LastId;
         Name = name;
+        Brand = brand;
+        Model = model;
         Status = EquipmentStatus.Available;
     }
 }
