@@ -29,7 +29,7 @@ public class RentalService
         return _rentals.AsReadOnly();
     }
 
-    public Rental BorrowEquipment(int userId, int equipmentId, int numberOfRentalDays)
+    public Rental BorrowEquipment(int userId, int equipmentId, int numberOfRentalDays, DateTime? rentalDate)
     {
         if (numberOfRentalDays <= 0)
             throw new ArgumentException("Number of rental days must be greater than 0.", nameof(numberOfRentalDays));
@@ -45,7 +45,7 @@ public class RentalService
         if (activeRentalCount >= rentalLimit)
             throw new InvalidOperationException("The user has reached the rental limit.");
 
-        var rental = new Rental(user, equipment, numberOfRentalDays);
+        var rental = new Rental(user, equipment, numberOfRentalDays, rentalDate);
 
         equipment.MarkAsBorrowed();
         _rentals.Add(rental);

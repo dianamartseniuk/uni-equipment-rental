@@ -8,13 +8,13 @@ public class Rental
     public DateTime RentalDate { get; private set; }
     public DateTime DueDate { get; private set; }
     public DateTime? ActualReturnDate { get; private set; } = null;
-    public Rental(User user, Equipment equipment, int numberOfRentalDays)
+    public Rental(User user, Equipment equipment, int numberOfRentalDays, DateTime? rentalDate = null)
     {
         LastId++;
         Id = LastId;
         User = user;
         Equipment = equipment;
-        RentalDate = DateTime.Now;
+        RentalDate = rentalDate ?? DateTime.Now;
         DueDate = RentalDate.AddDays(numberOfRentalDays);
     }
 
