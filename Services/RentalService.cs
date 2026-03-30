@@ -22,6 +22,9 @@ public class RentalService
 
     public Rental BorrowEquipment(int userId, int equipmentId, int numberOfRentalDays)
     {
+        if (numberOfRentalDays <= 0)
+            throw new ArgumentException("Number of rental days must be greater than 0.", nameof(numberOfRentalDays));
+
         var user = _userService.GetUserById(userId);
         var equipment = _equipmentService.GetEquipmentById(equipmentId);
 
