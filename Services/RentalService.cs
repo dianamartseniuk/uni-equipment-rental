@@ -39,6 +39,7 @@ public class RentalService
 
         var rental = new Rental(user, equipment, numberOfRentalDays);
 
+        equipment.MarkAsBorrowed();
         _rentals.Add(rental);
 
         return rental;
