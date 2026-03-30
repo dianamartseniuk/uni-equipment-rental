@@ -17,4 +17,13 @@ public class Rental
         RentalDate = DateTime.Now;
         DueDate = RentalDate.AddDays(numberOfRentalDays);
     }
+
+    public bool IsActive() => ActualReturnDate == null;
+    public bool IsOverdue() => IsActive() && DueDate.Date < DateTime.Now.Date;
+    public bool WasReturnedOnTime() => !IsActive() && DueDate.Date >= ActualReturnDate?.Date;
+    public void ReturnEquipment()
+    {
+        if (IsActive()) ActualReturnDate = DateTime.Now;
+        else throw new Exception("Item has been already returned");
+    }
 }
