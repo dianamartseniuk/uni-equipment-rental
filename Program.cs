@@ -5,8 +5,14 @@ using UniEquipmentRental.Policies;
 var userService = new UserService();
 var equipmentService = new EquipmentService();
 var userLimitPolicy = new DefaultUserLimitPolicy();
+var penaltyPolicy = new DefaultPenaltyPolicy();
 
-var rentalService = new RentalService(userService, equipmentService, userLimitPolicy);
+var rentalService = new RentalService(
+    userService,
+    equipmentService,
+    userLimitPolicy,
+    penaltyPolicy
+);
 try
 {
     // USERS

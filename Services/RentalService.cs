@@ -9,15 +9,18 @@ public class RentalService
     private readonly UserService _userService;
     private readonly EquipmentService _equipmentService;
     private readonly IUserLimitPolicy _userLimitPolicy;
+    private readonly IPenaltyPolicy _penaltyPolicy;
 
     public RentalService(
         UserService userService,
         EquipmentService equipmentService,
-        IUserLimitPolicy userLimitPolicy)
+        IUserLimitPolicy userLimitPolicy,
+        IPenaltyPolicy penaltyPolicy)
     {
         _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         _equipmentService = equipmentService ?? throw new ArgumentNullException(nameof(equipmentService));
         _userLimitPolicy = userLimitPolicy ?? throw new ArgumentNullException(nameof(userLimitPolicy));
+        _penaltyPolicy = penaltyPolicy ?? throw new ArgumentNullException(nameof(penaltyPolicy));
         _rentals = new List<Rental>();
     }
 
@@ -60,7 +63,7 @@ public class RentalService
         rental.ReturnEquipment();
         rental.Equipment.MarkAsAvailable();
 
-        return CalculatePenalty(rental);
+        return _penaltyPolicy.CalculatePenalty(rental);
     }
 
     public IReadOnlyList<Rental> GetActiveRentalsForUser(int userId)
@@ -94,17 +97,5 @@ public class RentalService
             throw new InvalidOperationException($"Rental with ID {rentalId} was not found.");
 
         return rental;
-    }
-
-    private decimal CalculatePenalty(Rental rental)
-    {
-        if (rental.IsActive())
-            return 0;
-
-        if (rental.WasReturnedOnTime())
-            return 0;
-
-        var daysLate = (rental.ActualReturnDate!.Value.Date - rental.DueDate.Date).Days;
-        return daysLate * 10m;
     }
 }
