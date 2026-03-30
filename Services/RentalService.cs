@@ -14,4 +14,9 @@ public class RentalService
         _equipmentService = equipmentService ?? throw new ArgumentNullException(nameof(equipmentService));
         _rentals = new List<Rental>();
     }
+
+    public IReadOnlyList<Rental> GetAllRentals()
+    {
+        return _rentals.AsReadOnly();
+    }
 }
