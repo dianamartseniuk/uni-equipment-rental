@@ -13,6 +13,8 @@ var rentalService = new RentalService(
     userLimitPolicy,
     penaltyPolicy
 );
+var reportService = new ReportService(userService, equipmentService, rentalService);
+
 try
 {
     // USERS
@@ -138,6 +140,10 @@ try
     {
         Console.WriteLine(item);
     }
+
+    // REPORT
+    Console.WriteLine();
+    Console.WriteLine(reportService.GenerateSummaryReport());
 }
 catch (Exception ex)
 {
