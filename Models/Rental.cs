@@ -26,4 +26,8 @@ public class Rental
         if (IsActive()) ActualReturnDate = DateTime.Now;
         else throw new Exception("Item has been already returned");
     }
+    public override string ToString()
+    {
+        return $"Rental {Id}: {Equipment.Name} for {User.FirstName} {User.LastName}, Due: {DueDate:d}, Returned: {(ActualReturnDate.HasValue ? ActualReturnDate.Value.ToShortDateString() : "No")}";
+    }
 }

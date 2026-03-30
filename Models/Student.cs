@@ -7,4 +7,8 @@ public class Student : User
     {
         Index = index;
     }
+    public override string ToString()
+    {
+        return base.ToString() + $" | Index: {Index}";
+    }
 }

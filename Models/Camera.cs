@@ -9,4 +9,8 @@ public class Camera : Equipment
         Megapixels = megapixels;
         LensType = lensType;
     }
+    public override string ToString()
+    {
+        return base.ToString() + $" | MP: {Megapixels} | Lens: {LensType}";
+    }
 }

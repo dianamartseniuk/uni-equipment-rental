@@ -11,4 +11,9 @@ public class Laptop : Equipment
         RamGB = ramGB;
         Processor = processor;
     }
+
+    public override string ToString()
+    {
+        return base.ToString() + $" | OS: {OperatingSystem} | RAM: {RamGB}GB | CPU: {Processor}";
+    }
 }

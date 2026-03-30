@@ -12,4 +12,8 @@ public abstract class User
         FirstName = firstName;
         LastName = lastName;
     }
+    public override string ToString()
+    {
+        return $"{Id}: {FirstName} {LastName}";
+    }
 }

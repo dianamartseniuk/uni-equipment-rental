@@ -9,4 +9,9 @@ public class Projector : Equipment
         BrightnessLumens = brightnessLumes;
         Resolution = resolution;
     }
+
+    public override string ToString()
+    {
+        return base.ToString() + $" | Brightness: {BrightnessLumens} lm | Resolution: {Resolution}";
+    }
 }

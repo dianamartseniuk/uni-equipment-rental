@@ -7,4 +7,8 @@ public class Employee : User
     {
         Department = department;
     }
+    public override string ToString()
+    {
+        return base.ToString() + $" | Department: {Department}";
+    }
 }
