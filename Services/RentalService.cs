@@ -60,4 +60,26 @@ public class RentalService
 
         throw new InvalidOperationException("Unknown user type.");
     }
+
+    private Rental GetRentalById(int rentalId)
+    {
+        var rental = _rentals.FirstOrDefault(r => r.Id == rentalId);
+
+        if (rental is null)
+            throw new InvalidOperationException($"Rental with ID {rentalId} was not found.");
+
+        return rental;
+    }
+
+    private decimal CalculatePenalty(Rental rental)
+    {
+        if (!rental.IsActive())
+            return 0;
+
+        if (rental.WasReturnedOnTime())
+            return 0;
+
+        var daysLate = (rental.ActualReturnDate!.Value.Date - rental.DueDate.Date).Days;
+        return daysLate * 10m;
+    }
 }
