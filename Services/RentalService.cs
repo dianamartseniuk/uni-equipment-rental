@@ -45,6 +45,37 @@ public class RentalService
         return rental;
     }
 
+    public decimal ReturnEquipment(int rentalId)
+    {
+        var rental = GetRentalById(rentalId);
+
+        if (!rental.IsActive())
+            throw new InvalidOperationException("This rental has already been returned.");
+
+        rental.ReturnEquipment();
+        rental.Equipment.MarkAsAvailable();
+
+        return CalculatePenalty(rental);
+    }
+
+    public IReadOnlyList<Rental> GetActiveRentalsForUser(int userId)
+    {
+        _userService.GetUserById(userId);
+
+        return _rentals
+            .Where(r => r.User.Id == userId && r.IsActive())
+            .ToList()
+            .AsReadOnly();
+    }
+
+    public IReadOnlyList<Rental> GetOverdueRentals()
+    {
+        return _rentals
+            .Where(r => r.IsOverdue())
+            .ToList()
+            .AsReadOnly();
+    }
+
     private int GetActiveRentalCountForUser(int userId)
     {
         return _rentals.Count(r => r.User.Id == userId && r.IsActive());
@@ -73,7 +104,7 @@ public class RentalService
 
     private decimal CalculatePenalty(Rental rental)
     {
-        if (!rental.IsActive())
+        if (rental.IsActive())
             return 0;
 
         if (rental.WasReturnedOnTime())
@@ -81,21 +112,5 @@ public class RentalService
 
         var daysLate = (rental.ActualReturnDate!.Value.Date - rental.DueDate.Date).Days;
         return daysLate * 10m;
-    }
-
-    public IReadOnlyList<Rental> GetActiveRentalsForUser(int userId)
-    {
-        return _rentals
-            .Where(r => r.User.Id == userId && r.IsActive())
-            .ToList()
-            .AsReadOnly();
-    }
-
-    public IReadOnlyList<Rental> GetOverdueRentals()
-    {
-        return _rentals
-            .Where(r => r.IsOverdue())
-            .ToList()
-            .AsReadOnly();
     }
 }
