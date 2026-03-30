@@ -19,4 +19,16 @@ public class RentalService
     {
         return _rentals.AsReadOnly();
     }
+
+    public Rental BorrowEquipment(int userId, int equipmentId, int numberOfRentalDays)
+    {
+        var user = _userService.GetUserById(userId);
+        var equipment = _equipmentService.GetEquipmentById(equipmentId);
+
+        var rental = new Rental(user, equipment, numberOfRentalDays);
+
+        _rentals.Add(rental);
+
+        return rental;
+    }
 }
