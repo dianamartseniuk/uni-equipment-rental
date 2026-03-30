@@ -40,7 +40,7 @@ public class EquipmentService
         return equipment;
     }
 
-    public void MarkEquipmentAsUnavailable(int id)
+    public void MarkAsUnavailable(int id)
     {
         var equipment = GetEquipmentById(id);
         equipment.MarkAsUnavailable();
