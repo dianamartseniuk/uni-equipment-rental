@@ -1,10 +1,12 @@
 ﻿using UniEquipmentRental.Models;
 using UniEquipmentRental.Services;
+using UniEquipmentRental.Policies;
 
 var userService = new UserService();
 var equipmentService = new EquipmentService();
-var rentalService = new RentalService(userService, equipmentService);
+var userLimitPolicy = new DefaultUserLimitPolicy();
 
+var rentalService = new RentalService(userService, equipmentService, userLimitPolicy);
 try
 {
     // USERS
