@@ -1,4 +1,5 @@
 using UniEquipmentRental.Models;
+using UniEquipmentRental.Interfaces;
 
 namespace UniEquipmentRental.Services;
 
@@ -7,11 +8,16 @@ public class RentalService
     private readonly List<Rental> _rentals;
     private readonly UserService _userService;
     private readonly EquipmentService _equipmentService;
+    private readonly IUserLimitPolicy _userLimitPolicy;
 
-    public RentalService(UserService userService, EquipmentService equipmentService)
+    public RentalService(
+        UserService userService,
+        EquipmentService equipmentService,
+        IUserLimitPolicy userLimitPolicy)
     {
         _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         _equipmentService = equipmentService ?? throw new ArgumentNullException(nameof(equipmentService));
+        _userLimitPolicy = userLimitPolicy ?? throw new ArgumentNullException(nameof(userLimitPolicy));
         _rentals = new List<Rental>();
     }
 
@@ -32,8 +38,7 @@ public class RentalService
             throw new InvalidOperationException("This equipment is not available for rental.");
 
         var activeRentalCount = GetActiveRentalCountForUser(user.Id);
-        var rentalLimit = GetUserRentalLimit(user);
-
+        var rentalLimit = _userLimitPolicy.GetRentalLimit(user);
         if (activeRentalCount >= rentalLimit)
             throw new InvalidOperationException("The user has reached the rental limit.");
 
@@ -79,17 +84,6 @@ public class RentalService
     private int GetActiveRentalCountForUser(int userId)
     {
         return _rentals.Count(r => r.User.Id == userId && r.IsActive());
-    }
-
-    private int GetUserRentalLimit(User user)
-    {
-        if (user is Student)
-            return 2;
-
-        if (user is Employee)
-            return 5;
-
-        throw new InvalidOperationException("Unknown user type.");
     }
 
     private Rental GetRentalById(int rentalId)
