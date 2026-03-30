@@ -31,10 +31,32 @@ public class RentalService
         if (equipment.Status != EquipmentStatus.Available)
             throw new InvalidOperationException("This equipment is not available for rental.");
 
+        var activeRentalCount = GetActiveRentalCountForUser(user.Id);
+        var rentalLimit = GetUserRentalLimit(user);
+
+        if (activeRentalCount >= rentalLimit)
+            throw new InvalidOperationException("The user has reached the rental limit.");
+
         var rental = new Rental(user, equipment, numberOfRentalDays);
 
         _rentals.Add(rental);
 
         return rental;
+    }
+
+    private int GetActiveRentalCountForUser(int userId)
+    {
+        return _rentals.Count(r => r.User.Id == userId && r.IsActive());
+    }
+
+    private int GetUserRentalLimit(User user)
+    {
+        if (user is Student)
+            return 2;
+
+        if (user is Employee)
+            return 5;
+
+        throw new InvalidOperationException("Unknown user type.");
     }
 }
