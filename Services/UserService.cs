@@ -21,4 +21,19 @@ public class UserService
 
         _users.Add(user);
     }
+
+    public IReadOnlyList<User> GetAllUsers()
+    {
+        return _users.AsReadOnly();
+    }
+
+    public User GetUserById(int id)
+    {
+        var user = _users.FirstOrDefault(u => u.Id == id);
+
+        if (user is null)
+            throw new InvalidOperationException($"User with ID {id} was not found.");
+
+        return user;
+    }
 }
