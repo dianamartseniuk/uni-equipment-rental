@@ -82,4 +82,20 @@ public class RentalService
         var daysLate = (rental.ActualReturnDate!.Value.Date - rental.DueDate.Date).Days;
         return daysLate * 10m;
     }
+
+    public IReadOnlyList<Rental> GetActiveRentalsForUser(int userId)
+    {
+        return _rentals
+            .Where(r => r.User.Id == userId && r.IsActive())
+            .ToList()
+            .AsReadOnly();
+    }
+
+    public IReadOnlyList<Rental> GetOverdueRentals()
+    {
+        return _rentals
+            .Where(r => r.IsOverdue())
+            .ToList()
+            .AsReadOnly();
+    }
 }
