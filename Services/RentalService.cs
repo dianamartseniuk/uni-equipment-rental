@@ -28,6 +28,9 @@ public class RentalService
         var user = _userService.GetUserById(userId);
         var equipment = _equipmentService.GetEquipmentById(equipmentId);
 
+        if (equipment.Status != EquipmentStatus.Available)
+            throw new InvalidOperationException("This equipment is not available for rental.");
+
         var rental = new Rental(user, equipment, numberOfRentalDays);
 
         _rentals.Add(rental);
