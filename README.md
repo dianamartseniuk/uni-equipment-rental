@@ -6,6 +6,15 @@ Aplikacja konsolowa w C#, która obsługuje proces wypożyczania sprzętu (lapto
 
 ---
 
+## Uruchomienie
+
+```bash
+git clone git@github.com:dianamartseniuk/uni-equipment-rental.git
+cd uni-equipment-rental
+dotnet run
+
+---
+
 ## Podział projektu i uzasadnienie
 
 Projekt został podzielony na trzy główne obszary:
